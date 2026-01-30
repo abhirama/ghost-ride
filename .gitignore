@@ -1,0 +1,13 @@
+# Claude Code local settings
+.claude/
+
+# User-specific content files
+latest-post.txt
+
+# macOS
+.DS_Store
+
+# Editor files
+*.swp
+*.swo
+*~
