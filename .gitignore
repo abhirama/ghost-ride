@@ -4,6 +4,13 @@
 # User-specific content files
 latest-post.txt
 
+# Python virtual environment
+venv/
+
+# Screenshot test files
+test-*.png
+screenshot.png
+
 # macOS
 .DS_Store
 
