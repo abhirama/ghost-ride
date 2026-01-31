@@ -32,13 +32,22 @@ else
 fi
 
 # Step 2: Capture blog screenshot
-echo "📸 Step 2/2: Capturing blog screenshot..."
+echo "📸 Step 2/3: Capturing blog screenshot..."
 "$SCRIPT_DIR/capture-blog.sh" "$BLOG_URL" /tmp/blog-screenshot.png
 if [ $? -eq 0 ]; then
     echo "   ✓ Screenshot saved to /tmp/blog-screenshot.png"
 else
     echo "   ✗ Failed to capture screenshot"
     exit 1
+fi
+
+# Step 3: Copy screenshot to clipboard for easy pasting
+echo "📋 Step 3/3: Copying screenshot to clipboard..."
+osascript -e 'set the clipboard to (read (POSIX file "/tmp/blog-screenshot.png") as «class PNGf»)' 2>/dev/null
+if [ $? -eq 0 ]; then
+    echo "   ✓ Screenshot copied to clipboard (ready to paste with Cmd+V)"
+else
+    echo "   ⚠ Could not copy to clipboard, but screenshot file is available"
 fi
 
 echo ""

@@ -46,18 +46,17 @@ Then run the displayed command to post to social media.
     * **IMPORTANT:** Do not close existing tabs. Open new tabs for each action.
     * **IMPORTANT:** Do not submit/publish automatically. Only draft.
 
-    **Action A: Twitter/X**
+    **Action A: Twitter/X (Image Post)**
     * Open new tab: `https://twitter.com/compose/tweet`
-    * Wait for the compose box.
-    * **Length Check:** If the full *Social Post String* exceeds 280 characters:
-      - **ALWAYS start from the beginning** - Keep the URL line first
-      - Add the two newlines after the URL
-      - Add content from the beginning of the text (do NOT skip paragraphs or pick from the middle)
-      - Truncate by cutting off text from the END when approaching the 280-char limit
-      - Add "..." at the very end to indicate truncation
-      - Example format: "Read this post at [URL]\n\n[First lines of content]..."
-    * If the full post is under 280 characters, paste the complete *Social Post String* without modification.
-    * *Status:* Draft Only.
+    * Wait for the compose box to appear.
+    * Extract the **Title** from the first line of `latest-post.txt`.
+    * Click inside the compose text area to focus it.
+    * Paste the screenshot image from clipboard using Cmd+V (or Ctrl+V).
+    * Wait for the image to upload and appear as a preview in the compose area.
+    * In the text field above or below the image, type the caption:
+      - Format: "[Title] - Read at [post_url]"
+      - Example: "Code is the new assembly - Read at https://abhyrama.com/2026/01/22/code-is-the-new-assembly/"
+    * *Status:* Draft Only. Do NOT click Tweet/Post.
 
     **Action B: LinkedIn**
     * Open new tab: `https://linkedin.com/feed`
