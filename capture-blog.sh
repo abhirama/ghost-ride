@@ -21,11 +21,14 @@ echo "Capturing screenshot of: $BLOG_URL"
 shot-scraper "$BLOG_URL" \
   -s 'article' \
   --padding 20 \
+  --wait 3000 \
   --javascript "
-    // Hide share buttons, related posts, footer, and comments
-    document.querySelectorAll('.sharedaddy, .jp-relatedposts, .entry-footer, #respond').forEach(el => el.style.display = 'none');
-    // Hide wpDiscuz inline comment overlays
-    document.querySelectorAll('.wpd-inline-shortcode, .wpd-inline-icon-wrapper, .wpd-inline-form-wrapper, .wpd-inline-opened, .wpd-inline-closed').forEach(el => el.style.display = 'none');
+    // Remove actionbar (WordPress comment overlay)
+    const actionbar = document.getElementById('actionbar');
+    if (actionbar) actionbar.remove();
+    document.querySelectorAll('[class*=\"actnbr\"]').forEach(el => el.remove());
+    // Remove other WordPress elements
+    document.querySelectorAll('.sharedaddy, .jp-relatedposts, .entry-footer, #respond').forEach(el => el.remove());
   " \
   -o "$OUTPUT_FILE" \
   --retina
