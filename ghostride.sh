@@ -8,11 +8,17 @@ set -e  # Exit on error
 if [ -z "$1" ]; then
     echo "Usage: $0 <blog_post_url>"
     echo "Example: $0 https://abhyrama.com/2026/01/28/shades-of-grey/"
+    echo ""
+    echo "This will automatically:"
+    echo "  1. Extract blog text from WordPress"
+    echo "  2. Capture clean screenshot"
+    echo "  3. Copy screenshot to clipboard"
+    echo "  4. Launch Claude to create social media drafts"
     exit 1
 fi
 
 BLOG_URL="$1"
-SCRIPT_DIR="$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Activate virtual environment
 source "$SCRIPT_DIR/venv/bin/activate"
@@ -20,22 +26,57 @@ source "$SCRIPT_DIR/venv/bin/activate"
 echo "🚀 GhostRide: Starting automation for $BLOG_URL"
 echo ""
 
-# Step 1: Extract blog text using Trafilatura
-echo "📝 Step 1/2: Extracting blog text..."
-trafilatura -u "$BLOG_URL" > "$SCRIPT_DIR/latest-post.txt"
-if [ $? -eq 0 ]; then
-    WORD_COUNT=$(wc -w < "$SCRIPT_DIR/latest-post.txt")
-    echo "   ✓ Extracted $WORD_COUNT words to latest-post.txt"
-else
+# Step 1: Extract blog text using Trafilatura (hybrid approach)
+echo "📝 Step 1/3: Extracting blog text..."
+TEMP_JSON="/tmp/ghostride-$$.json"
+TEMP_TEXT="/tmp/ghostride-$$.txt"
+TEXT_FILE="$SCRIPT_DIR/latest-post.txt"
+
+# Extract formatted text with proper paragraph spacing
+trafilatura -u "$BLOG_URL" --formatting 2>/dev/null > "$TEMP_TEXT"
+if [ $? -ne 0 ] || [ ! -s "$TEMP_TEXT" ]; then
+    rm -f "$TEMP_TEXT"
     echo "   ✗ Failed to extract text from $BLOG_URL"
+    exit 1
+fi
+
+# Extract metadata (title) from JSON
+trafilatura -u "$BLOG_URL" --json --with-metadata 2>/dev/null > "$TEMP_JSON"
+if [ $? -eq 0 ] && [ -s "$TEMP_JSON" ]; then
+    # Combine title from JSON with formatted text
+    python3 <<EOF > "$TEXT_FILE"
+import json
+
+with open('$TEMP_JSON', 'r') as f:
+    data = json.load(f)
+
+title = data.get('title', '')
+
+# Write title on first line, then blank line, then formatted content
+if title:
+    print(title)
+    print()  # Blank line
+
+with open('$TEMP_TEXT', 'r') as f:
+    print(f.read(), end='')
+EOF
+
+    rm -f "$TEMP_JSON" "$TEMP_TEXT"
+    WORD_COUNT=$(wc -w < "$TEXT_FILE")
+    TITLE=$(head -1 "$TEXT_FILE")
+    echo "   ✓ Extracted \"$TITLE\" ($WORD_COUNT words)"
+else
+    rm -f "$TEMP_JSON" "$TEMP_TEXT"
+    echo "   ✗ Failed to extract metadata from $BLOG_URL"
     exit 1
 fi
 
 # Step 2: Capture blog screenshot
 echo "📸 Step 2/3: Capturing blog screenshot..."
-"$SCRIPT_DIR/capture-blog.sh" "$BLOG_URL" /tmp/blog-screenshot.png
+SCREENSHOT_FILE="$SCRIPT_DIR/blog-screenshot.png"
+"$SCRIPT_DIR/capture-blog.sh" "$BLOG_URL" "$SCREENSHOT_FILE"
 if [ $? -eq 0 ]; then
-    echo "   ✓ Screenshot saved to /tmp/blog-screenshot.png"
+    echo "   ✓ Screenshot saved to $SCREENSHOT_FILE"
 else
     echo "   ✗ Failed to capture screenshot"
     exit 1
@@ -43,7 +84,7 @@ fi
 
 # Step 3: Copy screenshot to clipboard for easy pasting
 echo "📋 Step 3/3: Copying screenshot to clipboard..."
-osascript -e 'set the clipboard to (read (POSIX file "/tmp/blog-screenshot.png") as «class PNGf»)' 2>/dev/null
+osascript -e "set the clipboard to (read (POSIX file \"$SCREENSHOT_FILE\") as «class PNGf»)" 2>/dev/null
 if [ $? -eq 0 ]; then
     echo "   ✓ Screenshot copied to clipboard (ready to paste with Cmd+V)"
 else
@@ -53,9 +94,8 @@ fi
 echo ""
 echo "✅ GhostRide preparation complete!"
 echo ""
-echo "Next steps:"
-echo "1. Review the extracted content in: latest-post.txt"
-echo "2. Review the screenshot at: /tmp/blog-screenshot.png"
-echo "3. Run: claude --chrome -p \"Run the GhostRide routine with post_url: $BLOG_URL\""
+echo "🚀 Launching Claude to create social media drafts..."
 echo ""
-echo "👻 Ready to ghost-ride!"
+
+# Launch Claude immediately to prevent clipboard contamination
+claude --chrome -p "Run the GhostRide routine with post_url: $BLOG_URL"

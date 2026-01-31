@@ -15,10 +15,10 @@ shot-scraper install
 ## Usage
 
 ```bash
-# Capture screenshot (saves to /tmp/blog-screenshot.png by default)
-./capture-blog.sh https://abhyrama.com/2026/01/28/shades-of-grey/
+# Capture screenshot (specify output file)
+./capture-blog.sh https://abhyrama.com/2026/01/28/shades-of-grey/ blog-screenshot.png
 
-# Specify custom output file
+# Or use custom filename
 ./capture-blog.sh https://abhyrama.com/2026/01/28/shades-of-grey/ my-screenshot.png
 ```
 
