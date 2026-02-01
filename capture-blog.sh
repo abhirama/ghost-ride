@@ -25,11 +25,49 @@ shot-scraper "$BLOG_URL" \
   --padding 20 \
   --wait 3000 \
   --javascript "
-    // Force article to be wider for better Twitter aspect ratio
+    // Force PARENT containers and article to full width
     const article = document.querySelector('article');
     if (article) {
-      article.style.maxWidth = '1600px';
-      article.style.width = '1600px';
+      // First, expand all parent containers
+      document.querySelectorAll('#content-wrapper, .content-wrapper, #content, .site-content, #primary, .content-area, #main, .site-main').forEach(el => {
+        el.style.maxWidth = 'none';
+        el.style.width = '100%';
+      });
+
+      // Set article to full width
+      article.style.maxWidth = 'none';
+      article.style.width = '100%';
+      article.style.margin = '0';
+      article.style.padding = '20px';
+
+      // Aggressively remove ALL width/max-width constraints from article children
+      article.querySelectorAll('*').forEach(el => {
+        el.style.maxWidth = 'none';
+        el.style.minWidth = 'auto';
+      });
+
+      // Force block-level containers to full width
+      article.querySelectorAll('header, div, section, .entry-header, .entry-content, .entry-meta').forEach(el => {
+        el.style.width = '100%';
+        el.style.maxWidth = 'none';
+      });
+
+      // Ensure title is full width and wraps properly
+      const title = article.querySelector('.entry-title, h1');
+      if (title) {
+        title.style.width = '100%';
+        title.style.maxWidth = 'none';
+        title.style.whiteSpace = 'normal';
+        title.style.overflow = 'visible';
+        title.style.textOverflow = 'clip';
+      }
+
+      // Reset images and figures to not stretch
+      article.querySelectorAll('img, figure').forEach(el => {
+        el.style.width = 'auto';
+        el.style.maxWidth = '100%';
+        el.style.height = 'auto';
+      });
     }
     // Remove actionbar (WordPress comment overlay)
     const actionbar = document.getElementById('actionbar');
