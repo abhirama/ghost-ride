@@ -78,14 +78,16 @@ This will automatically:
     **Action B: LinkedIn**
     * Open new tab: `https://linkedin.com/feed`
     * Click "Start a post" (or equivalent button).
-    * **Length Check:** If the full *Social Post String* exceeds 3000 characters:
-      - **ALWAYS start from the beginning** - Keep the URL line first
-      - Add the two newlines after the URL
-      - Add content from the beginning of the text (do NOT skip paragraphs or pick from the middle)
-      - Truncate by cutting off text from the END when approaching the 3000-char limit
-      - Add "..." at the very end to indicate truncation
-      - Example format: "Read this post at [URL]\n\n[Content from beginning]..."
-    * If the full post is under 3000 characters, paste the complete *Social Post String* without modification.
+    * Wait for the text composer to appear.
+    * **Determine what to post:**
+      - If the *Social Post String* is under 3000 characters: Use it as-is
+      - If it exceeds 3000 characters: Create a truncated version by:
+        1. Starting with "Read this post on my blog at [post_url]"
+        2. Adding two newlines
+        3. Adding text from the beginning of latest-post.txt content
+        4. Stopping when approaching 3000 characters
+        5. Ending with "... [Read the full post on my blog]"
+    * **Paste once** - Paste the determined content (either full or truncated) into the composer.
     * *Status:* Draft Only.
 
     **Action C: Facebook**
@@ -97,7 +99,16 @@ This will automatically:
       - A white text box at the top of the feed
       - "Create post" button or area
     * If the composer doesn't expand into a modal/dialog, click again to ensure it's active.
-    * Once the text input area is active and ready, paste the full *Social Post String*.
+    * Wait for the text input area to be ready.
+    * **Determine what to post:**
+      - If the *Social Post String* is under 63,206 characters: Use it as-is
+      - If it exceeds 63,206 characters: Create a truncated version by:
+        1. Starting with "Read this post on my blog at [post_url]"
+        2. Adding two newlines
+        3. Adding text from the beginning of latest-post.txt content
+        4. Stopping when approaching 63,206 characters
+        5. Ending with "... [Read the full post on my blog]"
+    * **Paste once** - Paste the determined content (either full or truncated) into the composer.
     * Verify the text appears in the composer.
     * *Status:* Draft Only.
 
