@@ -1,33 +1,64 @@
 #!/bin/bash
 # GhostRide - Complete blog to social media automation
-# Usage: ./ghostride.sh <blog_post_url>
+# Usage: ./ghostride.sh [--link-only] <blog_post_url>
 
 set -e  # Exit on error
 
+# Parse arguments
+LINK_ONLY=false
+BLOG_URL=""
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --link-only|-l)
+            LINK_ONLY=true
+            shift
+            ;;
+        *)
+            BLOG_URL="$1"
+            shift
+            ;;
+    esac
+done
+
 # Check if URL is provided
-if [ -z "$1" ]; then
-    echo "Usage: $0 <blog_post_url>"
-    echo "Example: $0 https://abhyrama.com/2026/01/28/shades-of-grey/"
+if [ -z "$BLOG_URL" ]; then
+    echo "Usage: $0 [--link-only] <blog_post_url>"
     echo ""
-    echo "This will automatically:"
-    echo "  1. Extract blog text from WordPress"
-    echo "  2. Capture clean screenshot"
-    echo "  3. Copy screenshot to clipboard"
-    echo "  4. Launch Claude to create social media drafts"
+    echo "Examples:"
+    echo "  $0 https://abhyrama.com/2026/01/28/shades-of-grey/"
+    echo "  $0 --link-only https://abhyrama.com/2026/01/28/shades-of-grey/"
+    echo ""
+    echo "Modes:"
+    echo "  Default (full-text): Posts full blog content with images"
+    echo "  --link-only: Posts only title and link (no images)"
     exit 1
 fi
 
-BLOG_URL="$1"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Set posting mode
+if [ "$LINK_ONLY" = true ]; then
+    POSTING_MODE="link"
+    TOTAL_STEPS=1
+else
+    POSTING_MODE="full"
+    TOTAL_STEPS=3
+fi
 
 # Activate virtual environment
 source "$SCRIPT_DIR/venv/bin/activate"
 
 echo "🚀 GhostRide: Starting automation for $BLOG_URL"
+if [ "$LINK_ONLY" = true ]; then
+    echo "   Mode: Link-only (title + URL)"
+else
+    echo "   Mode: Full-text (with images)"
+fi
 echo ""
 
 # Step 1: Extract blog text using Trafilatura (hybrid approach)
-echo "📝 Step 1/3: Extracting blog text..."
+echo "📝 Step 1/$TOTAL_STEPS: Extracting blog text..."
 TEMP_JSON="/tmp/ghostride-$$.json"
 TEMP_TEXT="/tmp/ghostride-$$.txt"
 TEXT_FILE="$SCRIPT_DIR/latest-post.txt"
@@ -71,24 +102,27 @@ else
     exit 1
 fi
 
-# Step 2: Capture blog screenshot
-echo "📸 Step 2/3: Capturing blog screenshot..."
-SCREENSHOT_FILE="$SCRIPT_DIR/blog-screenshot.png"
-"$SCRIPT_DIR/capture-blog.sh" "$BLOG_URL" "$SCREENSHOT_FILE"
-if [ $? -eq 0 ]; then
-    echo "   ✓ Screenshot saved to $SCREENSHOT_FILE"
-else
-    echo "   ✗ Failed to capture screenshot"
-    exit 1
-fi
+# Steps 2 & 3: Screenshot and clipboard (only for full-text mode)
+if [ "$LINK_ONLY" = false ]; then
+    # Step 2: Capture blog screenshot
+    echo "📸 Step 2/3: Capturing blog screenshot..."
+    SCREENSHOT_FILE="$SCRIPT_DIR/blog-screenshot.png"
+    "$SCRIPT_DIR/capture-blog.sh" "$BLOG_URL" "$SCREENSHOT_FILE"
+    if [ $? -eq 0 ]; then
+        echo "   ✓ Screenshot saved to $SCREENSHOT_FILE"
+    else
+        echo "   ✗ Failed to capture screenshot"
+        exit 1
+    fi
 
-# Step 3: Copy screenshot to clipboard for easy pasting
-echo "📋 Step 3/3: Copying screenshot to clipboard..."
-osascript -e "set the clipboard to (read (POSIX file \"$SCREENSHOT_FILE\") as «class PNGf»)" 2>/dev/null
-if [ $? -eq 0 ]; then
-    echo "   ✓ Screenshot copied to clipboard (ready to paste with Cmd+V)"
-else
-    echo "   ⚠ Could not copy to clipboard, but screenshot file is available"
+    # Step 3: Copy screenshot to clipboard for easy pasting
+    echo "📋 Step 3/3: Copying screenshot to clipboard..."
+    osascript -e "set the clipboard to (read (POSIX file \"$SCREENSHOT_FILE\") as «class PNGf»)" 2>/dev/null
+    if [ $? -eq 0 ]; then
+        echo "   ✓ Screenshot copied to clipboard (ready to paste with Cmd+V)"
+    else
+        echo "   ⚠ Could not copy to clipboard, but screenshot file is available"
+    fi
 fi
 
 echo ""
@@ -100,4 +134,5 @@ echo ""
 # Launch Claude immediately to prevent clipboard contamination
 claude --chrome -p "$(cat "$SCRIPT_DIR/ROUTINES/ghostride.md")
 
+posting_mode: $POSTING_MODE
 post_url: $BLOG_URL"

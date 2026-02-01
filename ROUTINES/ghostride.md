@@ -4,14 +4,24 @@
 
 **Inputs:**
 1. Content Source: `latest-post.txt` (blog title and text)
-2. Screenshot: `blog-screenshot.png` (in clipboard, ready to paste)
-3. Link Source: `post_url` (blog post URL)
+2. Link Source: `post_url` (blog post URL)
+3. Posting Mode: `posting_mode` (either `full` or `link`)
+4. Screenshot: `blog-screenshot.png` (in clipboard, only available when `posting_mode` is `full`)
 
 ## Step-by-Step Instructions
 
 ### 1. PREPARATION PHASE
 
-* Read the **entire content** of `latest-post.txt` in the project directory (includes title on line 1, blank line, then article text).
+* Read the **Title** from the first line of `latest-post.txt` in the project directory.
+
+**If `posting_mode` is `link`:**
+* Construct the **Post Content** as:
+    > [Title]
+    > [Blank line]
+    > [post_url]
+
+**If `posting_mode` is `full`:**
+* Read the **entire content** of `latest-post.txt` (includes title on line 1, blank line, then article text).
 * Construct the **Social Post String**:
     > "Read this post on my blog at [post_url]"
     > [Two Newlines]
@@ -22,11 +32,18 @@
 * **IMPORTANT:** Do not close existing tabs. Open new tabs for each action.
 * **IMPORTANT:** Do not submit/publish automatically. Only draft.
 
-**Action A: Twitter/X (Image Post)**
+**Action A: Twitter/X**
 * Open new tab: `https://twitter.com/compose/tweet`
 * Wait for the compose box to appear.
-* Extract the **Title** from the first line of `latest-post.txt`.
 * Click inside the compose text area to focus it.
+
+**If `posting_mode` is `link`:**
+* Type the **Post Content**:
+  - Format: "[Title]\n\n[post_url]"
+  - Example: "Vroom Vroom: Performance Engineering from First Principles\n\nhttps://abhyrama.com/2026/01/28/vroom-vroom/"
+* *Status:* Draft Only. Do NOT click Tweet/Post.
+
+**If `posting_mode` is `full`:**
 * **CRITICAL**: Paste from clipboard using Cmd+V (or Ctrl+V).
   - **DO NOT click any upload buttons or file pickers**
   - **DO NOT use any alternative image upload methods**
@@ -51,6 +68,14 @@
 * Open new tab: `https://linkedin.com/feed`
 * Click "Start a post" (or equivalent button).
 * Wait for the text composer to appear.
+
+**If `posting_mode` is `link`:**
+* Type the **Post Content**:
+  - Format: "[Title]\n\n[post_url]"
+  - Example: "Vroom Vroom: Performance Engineering from First Principles\n\nhttps://abhyrama.com/2026/01/28/vroom-vroom/"
+* *Status:* Draft Only.
+
+**If `posting_mode` is `full`:**
 * **Determine what to post:**
   - If the *Social Post String* is under 3000 characters: Use it as-is
   - If it exceeds 3000 characters: Create a truncated version by:
@@ -72,6 +97,15 @@
   - "Create post" button or area
 * If the composer doesn't expand into a modal/dialog, click again to ensure it's active.
 * Wait for the text input area to be ready.
+
+**If `posting_mode` is `link`:**
+* Type the **Post Content**:
+  - Format: "[Title]\n\n[post_url]"
+  - Example: "Vroom Vroom: Performance Engineering from First Principles\n\nhttps://abhyrama.com/2026/01/28/vroom-vroom/"
+* Verify the text appears in the composer.
+* *Status:* Draft Only.
+
+**If `posting_mode` is `full`:**
 * **Determine what to post:**
   - If the *Social Post String* is under 63,206 characters: Use it as-is
   - If it exceeds 63,206 characters: Create a truncated version by:

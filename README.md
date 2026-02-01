@@ -12,28 +12,34 @@ GhostRide is a workflow-based automation tool that uses [Anthropic's Claude](htt
 2. **Run** one command: `./ghostride.sh https://your-blog.com/your-post`
 3. **GhostRide automatically**:
    - Extracts blog title and text from WordPress using Trafilatura
-   - Captures a clean screenshot using shot-scraper (removes ads, comments, share buttons)
-   - Copies screenshot to clipboard for pasting
+   - **Full-text mode** (default): Captures screenshot, copies to clipboard
+   - **Link-only mode** (`--link-only`): Skips screenshot for faster posting
    - Launches Claude with Computer Use to create drafts
 4. **Review and publish** the drafts on:
+
+   **Full-text mode (default):**
    - **Twitter/X**: Screenshot image with "[Title] - Read at [URL]" caption
    - **LinkedIn**: Full text with smart truncation at 3000 characters
    - **Facebook**: Full text with smart truncation at 63,206 characters
 
+   **Link-only mode:**
+   - **All platforms**: Simple text post with "[Title]\n\n[URL]" (title, blank line, URL)
+
 **Behind the scenes:**
 - Text saved to `latest-post.txt` (in project directory, ignored by git)
-- Screenshot saved to `blog-screenshot.png` and clipboard
-- Claude reads the text file and pastes the image from clipboard
+- Screenshot saved to `blog-screenshot.png` and clipboard (full-text mode only)
+- Claude reads the text file and pastes the image from clipboard (full-text mode)
 - All drafts are created but NOT published (you review first)
 
 ## Features
 
 - ✅ **Fully automated** - One command does everything, auto-launches Claude (no manual steps)
+- ✅ **Two posting modes** - Full-text (with images) or link-only (title + URL) via `--link-only` flag
 - ✅ **WordPress integration** - Extracts title and content using Trafilatura
-- ✅ **Clean screenshots** - Removes WordPress actionbar, share buttons, comments, footer
+- ✅ **Clean screenshots** - Removes WordPress actionbar, share buttons, comments, footer (full-text mode)
 - ✅ **Safety first** - Creates drafts only, never auto-publishes
-- ✅ **Image posts for Twitter** - Uses screenshot via clipboard paste (no file picker issues)
-- ✅ **Smart truncation** - Handles character limits (Twitter N/A, LinkedIn 3000, Facebook 63,206) with "[Read the full post on my blog]" suffix
+- ✅ **Image posts for Twitter** - Uses screenshot via clipboard paste (no file picker issues, full-text mode)
+- ✅ **Smart truncation** - Handles character limits (Twitter N/A, LinkedIn 3000, Facebook 63,206) with "[Read the full post on my blog]" suffix (full-text mode)
 - ✅ **Session reuse** - Uses your existing authenticated browser sessions
 - ✅ **Multi-platform** - One command syndicates to three social networks
 - ✅ **Clipboard security** - Auto-run prevents clipboard contamination from passwords
@@ -61,14 +67,28 @@ GhostRide is a workflow-based automation tool that uses [Anthropic's Claude](htt
 
 ## Usage
 
+### Full-text mode (default)
+Posts full blog content with images:
 ```bash
 ./ghostride.sh https://your-blog.com/your-post
 ```
 
-That's it! GhostRide will automatically:
+GhostRide will automatically:
 - Extract your blog text
 - Capture a screenshot
+- Copy screenshot to clipboard
 - Launch Claude to create drafts on all three platforms
+
+### Link-only mode
+Posts only title and URL (faster, no images):
+```bash
+./ghostride.sh --link-only https://your-blog.com/your-post
+```
+
+GhostRide will automatically:
+- Extract your blog title
+- Skip screenshot capture
+- Launch Claude to create simple link posts on all three platforms
 
 ## Configuration
 
