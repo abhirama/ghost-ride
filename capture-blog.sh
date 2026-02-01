@@ -40,6 +40,12 @@ shot-scraper "$BLOG_URL" \
       article.style.margin = '0';
       article.style.padding = '20px';
 
+      // CAP HEIGHT for Twitter: Max height for 3:4 ratio (prevents mobile cropping)
+      // Target: 3200px final (at 1.5x scale) = 2133px viewport, minus padding
+      const MAX_HEIGHT = 2000;
+      article.style.maxHeight = MAX_HEIGHT + 'px';
+      article.style.overflow = 'hidden';
+
       // Aggressively remove ALL width/max-width constraints from article children
       article.querySelectorAll('*').forEach(el => {
         el.style.maxWidth = 'none';
