@@ -18,7 +18,7 @@ GhostRide is a workflow-based automation tool that uses [Anthropic's Claude](htt
 4. **Review and publish** the drafts on:
    - **Twitter/X**: Screenshot image with "[Title] - Read at [URL]" caption
    - **LinkedIn**: Full text with smart truncation at 3000 characters
-   - **Facebook**: Full text
+   - **Facebook**: Full text with smart truncation at 63,206 characters
 
 **Behind the scenes:**
 - Text saved to `latest-post.txt` (in project directory, ignored by git)
@@ -33,11 +33,11 @@ GhostRide is a workflow-based automation tool that uses [Anthropic's Claude](htt
 - ✅ **Clean screenshots** - Removes WordPress actionbar, share buttons, comments, footer
 - ✅ **Safety first** - Creates drafts only, never auto-publishes
 - ✅ **Image posts for Twitter** - Uses screenshot via clipboard paste (no file picker issues)
-- ✅ **Smart truncation** - Handles character limits (Twitter N/A, LinkedIn 3000, Facebook unlimited)
+- ✅ **Smart truncation** - Handles character limits (Twitter N/A, LinkedIn 3000, Facebook 63,206) with "[Read the full post on my blog]" suffix
 - ✅ **Session reuse** - Uses your existing authenticated browser sessions
 - ✅ **Multi-platform** - One command syndicates to three social networks
 - ✅ **Clipboard security** - Auto-run prevents clipboard contamination from passwords
-- ✅ **Temporary files** - All files stored in `/tmp/` for automatic cleanup
+- ✅ **Local files** - Text and screenshot stored in project directory (excluded from git)
 
 ## Requirements
 
