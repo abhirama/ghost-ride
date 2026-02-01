@@ -98,4 +98,6 @@ echo "🚀 Launching Claude to create social media drafts..."
 echo ""
 
 # Launch Claude immediately to prevent clipboard contamination
-claude --chrome -p "Run the GhostRide routine with post_url: $BLOG_URL"
+claude --chrome -p "$(cat "$SCRIPT_DIR/ROUTINES/ghostride.md")
+
+post_url: $BLOG_URL"

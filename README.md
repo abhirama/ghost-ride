@@ -72,10 +72,12 @@ That's it! GhostRide will automatically:
 
 ## Configuration
 
-The workflow is defined in `CLAUDE.md`. You can customize:
+The workflow execution is defined in `ROUTINES/ghostride.md`. You can customize:
 - Character limits for each platform
 - Truncation behavior
 - Post format and structure
+
+Development context and setup instructions are in `CLAUDE.md`.
 
 ## Safety & Security
 
