@@ -2,6 +2,8 @@
 **Project:** Browser automation for syndicating blog posts to social media.
 **Mechanism:** Uses Claude's "Computer Use" / Browser capability to ghost-ride the active Chrome session.
 
+**Note:** See `TOOLS.md` for shot-scraper and trafilatura CLI reference when debugging or modifying capture scripts.
+
 ## 🔧 Preparation (One-Time Setup)
 
 Before running GhostRide for the first time:
