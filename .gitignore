@@ -19,3 +19,17 @@ screenshot.png
 *.swp
 *.swo
 *~
+
+# Claude Code worktrees (EnterWorktree / workon)
+.claude/worktrees/
+
+# OS and editor junk
+.DS_Store
+*.swp
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
