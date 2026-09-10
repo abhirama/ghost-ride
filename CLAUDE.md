@@ -73,3 +73,6 @@ post_url: $BLOG_URL"
 ```
 
 This separation keeps development context (this file) separate from execution instructions (ROUTINES/).
+@~/.claude/shared/issue-workflow.md
+@~/.claude/shared/atomic-docs.md
+@~/.claude/shared/python.md

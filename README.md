@@ -115,3 +115,16 @@ Development context and setup instructions are in `CLAUDE.md`.
 - Both text and screenshot stored locally but excluded from git
 - No temporary files or data persisted in system directories
 - Blog content only used for social media draft creation
+
+## Git Hooks
+
+This repo follows the issue-driven workflow: every commit belongs to a feature
+branch and references a GitHub issue. Two git hooks enforce it — one blocks
+commits on the repo's default branch, the other requires a `#N` issue
+reference.
+
+Git never activates hooks from a checkout, so **each clone must run this once**:
+
+```bash
+newrepo
+```
