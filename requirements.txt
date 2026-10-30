@@ -22,4 +22,4 @@ tld==0.13.1
 trafilatura==2.0.0
 typing_extensions==4.15.0
 tzlocal==5.3.1
-urllib3==2.6.3
+urllib3==2.8.0
