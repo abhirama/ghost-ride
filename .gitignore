@@ -33,3 +33,8 @@ venv/
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Secrets: .env files, but not the committed template
+.env
+.env.*
+!.env.example

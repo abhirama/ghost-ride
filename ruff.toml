@@ -1,0 +1,12 @@
+# Lint and format config (#643). A starting point: tune it per repo, and
+# newrepo will not overwrite it.
+#
+# target-version is explicit because the Mac's venvs are Python 3.14 and
+# minions' are 3.12 — inferred, the two boxes would disagree on one commit.
+target-version = "py312"
+
+[lint]
+# ruff's "popular, not too strict" set. E501 (line length) is left to the
+# formatter; it was ~90% of all findings across the repos measured in #643.
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
