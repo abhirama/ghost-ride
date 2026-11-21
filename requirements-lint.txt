@@ -1,0 +1,6 @@
+# Lint and type-check tools, pinned (#643). Kept apart from requirements.txt:
+# the hooks run these through `uvx` at exactly these versions, so nothing is
+# installed into the venv and the Mac and minions format identically.
+# Upgrading is a deliberate, per-repo edit.
+ruff==0.16.8
+mypy==2.3.1
